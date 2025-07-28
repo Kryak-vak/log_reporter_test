@@ -15,9 +15,7 @@ class ReportEnum(Enum):
         return tuple(e.value for e in cls)
 
 
-def get_reporter_from_arg(report_arg: str | None) -> type[AbstractReporter]:
-    report_enum = ReportEnum(report_arg) if report_arg else ReportEnum.AVERAGE
-
+def get_reporter_from_arg(report_enum: ReportEnum) -> type[AbstractReporter]:
     map_ = {
         ReportEnum.AVERAGE: UrlAvgResponseTimeReporter
     }
@@ -52,6 +50,7 @@ def create_arg_parser() -> argparse.ArgumentParser:
         type=str,
         choices=ReportEnum.to_tuple(),
         help="a string specifying the report type",
+        default=ReportEnum.AVERAGE
     )
     arg_parser.add_argument(
         "--date",
