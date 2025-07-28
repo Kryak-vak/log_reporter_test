@@ -3,8 +3,14 @@
 
 ## Примеры запуска:
 - python -m src.main -f data/example1.log
+!(assets/screenshot_1.png)
 - python -m src.main -f data/example2.log -r average
+!(assets/screenshot_2.png)
 - python -m src.main -d data/ --date 2025-06-24
+!(assets/screenshot_3.png)
+
+
+
 
 ## Поддерживаемые опции:
 - -f, --file: путь к одному или нескольким лог-файлам

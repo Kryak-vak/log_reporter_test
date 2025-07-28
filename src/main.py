@@ -64,7 +64,7 @@ def main() -> None:
     arg_parser = create_arg_parser()
     args = arg_parser.parse_args()
     log_reader = LogReader(args.file, args.dir)
-    reporter = get_reporter_from_arg(args.report)
+    reporter = get_reporter_from_arg(ReportEnum(args.report))
     report_agregator = ReportAgregator(
         log_reader=log_reader,
         reporters=(reporter(args.date), )
