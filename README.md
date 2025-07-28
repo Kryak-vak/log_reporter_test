@@ -3,11 +3,11 @@
 
 ## Примеры запуска:
 - python -m src.main -f data/example1.log
-!(assets/screenshot_1.png)
+![Пример отчёта](assets/screenshot_1.png)
 - python -m src.main -f data/example2.log -r average
-!(assets/screenshot_2.png)
+![Пример отчёта](assets/screenshot_2.png)
 - python -m src.main -d data/ --date 2025-06-24
-!(assets/screenshot_3.png)
+![Пример отчёта](assets/screenshot_3.png)
 
 
 
