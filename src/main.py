@@ -4,20 +4,28 @@ from datetime import date
 from enum import Enum
 
 from src.logs import LogReader
-from src.reports import ReportAgregator, UrlAvgResponseTimeReporter
+from src.reports import AbstractReporter, ReportAgregator, UrlAvgResponseTimeReporter
 
 
 class ReportEnum(Enum):
     AVERAGE = "average"
-    AVERAGE2 = "average2"
-    AVERAGE3 = "average3"
 
     @classmethod
     def to_tuple(cls) -> tuple[str, ...]:
         return tuple(e.value for e in cls)
 
 
-def main() -> None:
+def get_reporter_from_arg(report_arg: str | None) -> type[AbstractReporter]:
+    report_enum = ReportEnum(report_arg) if report_arg else ReportEnum.AVERAGE
+
+    map_ = {
+        ReportEnum.AVERAGE: UrlAvgResponseTimeReporter
+    }
+
+    return map_[report_enum]
+
+
+def create_arg_parser() -> argparse.ArgumentParser:
     arg_parser = argparse.ArgumentParser(
         prog="LogReporter",
         description="Create an in-console report of the provided log files",
@@ -50,16 +58,23 @@ def main() -> None:
         type=date.fromisoformat,
         help="a date string in ISO 8601 format (YYYY-MM-DD)",
     )
+
+    return arg_parser
+
+def main() -> None:
+    arg_parser = create_arg_parser()
     args = arg_parser.parse_args()
     log_reader = LogReader(args.file, args.dir)
+    reporter = get_reporter_from_arg(args.report)
+    print(f"{args.date = }")
     report_agregator = ReportAgregator(
         log_reader=log_reader,
-        reporters=(UrlAvgResponseTimeReporter(), )
+        reporters=(reporter(args.date), )
     )
     report_agregator.run_reporters()
 
     for reporter in report_agregator.reporters:
-        report = reporter.get_report()
+        report = reporter.get_formatted_report()
 
         print(report)
     
